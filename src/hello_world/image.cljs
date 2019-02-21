@@ -100,8 +100,11 @@
 ; (run-sketch)
 
 
+(js/alert "I am being reloaded")
+
+
 #_
-(js/alert "stop")
+(js/alert "Hello, clj-syd!")
 
 #_
 (let

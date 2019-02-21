@@ -1,0 +1,80 @@
+#+TITLE:  emacs, figwheels and clojurescripts, Oh my!
+#+AUTHOR:    Alain Picard
+#+EMAIL:     Dr.Alain.Picard@gmail.com
+#+REVEAL_THEME: moon
+#+REVEAL_TRANS: cube
+#+REVEAL_EXTRA_CSS: prezzo.css
+#+OPTIONS: num:nil
+#+OPTIONS: reveal_title_slide:nil
+#+OPTIONS: reveal_progress:nil
+#+OPTIONS: reveal_control:nil
+#+OPTIONS: reveal_with_toc:nil
+
+
+
+* emacs, figwheels and clojurescripts, Oh my!
+
+#+REVEAL_HTML: <h3> Alain Picard </h3>
+#+REVEAL_HTML: <h4> CLJ-SYD Feb 2019 </h4>
+
+* cider and clojurescript
+
+As of version 18, we can now jack in directly
+into =clojurescript= from emacs/cider with the command
+
+#+BEGIN_QUOTE
+C-c M-j runs the command cider-jack-in-clj 
+#+END_QUOTE
+
+: cider-version is a variable defined in ‘cider.el’.
+: Its value is "0.20.0"
+
+* Your =lein= may be out of date...
+
+
+#+BEGIN_QUOTE
+lein version
+
+Leiningen 2.8.3 on Java 1.8.0_144
+#+END_QUOTE
+
+* figwheel -> figwheel-main
+
+=figwheel= is dead.
+
+Long live =figwheel-main= !
+
+** Advantages
+
+ - a cleaner codebase (do we care?)
+ - a much simplified =lein= profile (ok, that's good)
+ - plays nice with new clojure CLI tools (does anyone use this?)
+
+* Getting started
+
+Simplest way: use the =figwheel-main= template at 
+https://rigsomelight.com/figwheel-main-template/
+
+: lein new figwheel-main hello-world.core -- --reagent 
+:    # or --rum, --om, --react or nothing
+
+#+BEGIN_COMMENT
+Go and view the produced project.clj file
+
+Make a note of the figwheel-main version; note
+it's buggy and the latest version is, also, still buggy.
+#+END_COMMENT
+
+
+Real quick:
+ - create a new project
+ - copy my sample code
+ - jack in clojurescript
+ - note the type of repl being asked for
+ - note the :dev vs dev bug
+ - demonstrate running code interactively via emacs
+ - demonstrate "normal" figwheel way of interacting,
+   which is via reloading
+ - demonstrate what I like, which is the lisp way
+   of running one form at a time.
+
