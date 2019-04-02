@@ -99,10 +99,6 @@
 ; uncomment this line to reset the sketch:
 ; (run-sketch)
 
-
-(js/alert "I am being reloaded")
-
-
 #_
 (js/alert "Hello, clj-syd!")
 

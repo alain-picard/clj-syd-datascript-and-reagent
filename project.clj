@@ -9,6 +9,7 @@
                  [ring "1.7.1"]
                  [http-kit "2.3.0"]
                  [reagent "0.8.1"]
+                 [datascript "0.18.2"]
                  [quil "2.8.0"]]
 
   :source-paths ["src"]
@@ -20,5 +21,6 @@
             "fig:test"  ["run" "-m" "figwheel.main" "-co" "test.cljs.edn" "-m" hello-world.test-runner]}
 
   :profiles {:dev {:dependencies [[com.bhauman/figwheel-main "0.2.1-SNAPSHOT"]
+                                  [devcards "0.2.6"]
                                   #_ ; We don't need this one.  We have a real REPL, i.e. emacs.  :-)
                                   [com.bhauman/rebel-readline-cljs "0.1.4"]]}})
