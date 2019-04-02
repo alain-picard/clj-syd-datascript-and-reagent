@@ -1,5 +1,22 @@
 /* some style */
 
-h1
+html {
+    background : #238;
+}
+
+h1sd
 {font-family : courier, sans;
  color : #0c0eee}
+
+div#hello
+{
+    margin: 2em;
+    padding: 2em;
+    background : #ddd;
+}
+
+h3.inline
+{
+    display: inline;
+    padding-right: 1em;
+}
