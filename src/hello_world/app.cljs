@@ -1,5 +1,6 @@
 (ns ^:figwheel-hooks hello-world.app
   (:require
+   [hello-world.names :refer [sample-names]]
    [goog.dom :as gdom]
    [reagent.core :as reagent]
    [datascript.db :as db]
@@ -80,25 +81,12 @@
   (reagent/render-component [hello-world] (gdom/getElement "app")))
 
 (defn initialize-database! []
- (d/transact! global-database
-              [{:name "Ivan", :age 19 :sex "male"}
-               {:name "Katerina", :sex "female"}
-               {:name "Christine", :sex "female"}
-               {:name "Bob", :sex "male"}
-               {:name "Helen", :sex "female"}
-               {:name "Susan", :sex "female"}
-               {:name "Samantha", :sex "female"}
-               {:name "Chlöe", :sex "female"}
-               {:name "Jack", :sex "male"}
-               {:name "John", :sex "male"}
-               {:name "James", :sex "male"}
-               {:name "Leo", :sex "male"}
-               {:name "Fred", :sex "male"}]))
+ (d/transact! global-database sample-names))
 
 (defn fill-database! [n]
-  (d/transact! global-database
-               (repeatedly n #(hash-map :name (str (cljs.core/random-uuid ))
-                                        :sex (rand-nth ["male" "female"])))))
+   (d/transact! global-database
+                (repeatedly n #(hash-map :name (str (cljs.core/random-uuid ))
+                                         :sex (rand-nth ["male" "female"])))))
 
 
 #_
@@ -128,11 +116,36 @@
 (all-names-matching "c" @global-database)
 
 #_
-(d/q '[:find ?e ?name
+(d/q '[:find (pull ?e [:name :sex :db/id])     ;(sample 3 ?name) (sample 3 ?e)
        :where
        [?e :name ?name]
        [?e :name]]
      @current-db)
+
+([["Ivan" "Katerina" "John"] [5 7 8]])
+
+(defn starts-with*? [s subs]
+  (s/starts-with? (s/lower-case s)
+                  (s/lower-case subs)))
+
+(time
+ (d/q '[:find ?sex (sample 3 ?name)
+        :in $ ?pred ?start
+        :where
+        [?e :name ?name]
+        [?e :sex ?sex]
+        [(?pred ?name ?start)]]
+      @current-db
+      s/starts-with?
+      "J"))
+
+(clojure.string/starts-with?  "Ivan" "I")
+
+
+(time (d/q '[:find (sample 3 ?e)
+        :where
+        [?e :name ?name]]
+      @current-db))
 
 
 (def db1
