@@ -1,14 +1,14 @@
 (ns hello-world.names)
 
-(def sample-names [{:name "Alberto" :sex "male"}
-                   {:name "Aletha" :sex "female"}
-                   {:name "Amina" :sex "female"}
-                   {:name "Anderson" :sex "male"}
-                   {:name "Arnold" :sex "male"}
+(def sample-names [{:name "Alberto" :sex "male" :age 17}
+                   {:name "Aletha" :sex "female" :age 31}
+                   {:name "Amina" :sex "female" :age 19}
+                   {:name "Anderson" :sex "male" :age 19}
+                   {:name "Arnold" :sex "male" :age 29}
                    {:name "August" :sex "male"}
                    {:name "Benito" :sex "male"}
                    {:name "Bob", :sex "male"}
-                   {:name "Britt" :sex "male"}
+                   {:name "Brett" :sex "male"}
                    {:name "Brittni" :sex "female"}
                    {:name "Carletta" :sex "female"}
                    {:name "Carrol" :sex "male"}

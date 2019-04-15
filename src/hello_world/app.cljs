@@ -9,7 +9,10 @@
 
 (enable-console-print!)
 
-(def global-database (d/create-conn {:name { :db/index true }}))
+(def global-database (d/create-conn {:name {:db/index true}}))
+
+;; Heres the central trick --- reagent uses the famous ratom,
+;; and we bind all changes to the global-database to update this ratom.
 
 (def current-db (reagent/atom nil))
 
@@ -103,130 +106,5 @@
   (do
     (initialize-database!)
     (mount-app-element)))
-
-
-;;;; Testing/exploring forms below
-;;;; Data script operations
-#_
-(d/transact! global-database
-             [[:db/add -1 :name "Caleb"]
-              [:db/add -1 :sex "Male"]])
-
-#_
-(all-names-matching "c" @global-database)
-
-#_
-(d/q '[:find (pull ?e [:name :sex :db/id])     ;(sample 3 ?name) (sample 3 ?e)
-       :where
-       [?e :name ?name]
-       [?e :name]]
-     @current-db)
-
-([["Ivan" "Katerina" "John"] [5 7 8]])
-
-(defn starts-with*? [s subs]
-  (s/starts-with? (s/lower-case s)
-                  (s/lower-case subs)))
-
-(time
- (d/q '[:find ?sex (sample 3 ?name)
-        :in $ ?pred ?start
-        :where
-        [?e :name ?name]
-        [?e :sex ?sex]
-        [(?pred ?name ?start)]]
-      @current-db
-      s/starts-with?
-      "J"))
-
-(clojure.string/starts-with?  "Ivan" "I")
-
-
-(time (d/q '[:find (sample 3 ?e)
-        :where
-        [?e :name ?name]]
-      @current-db))
-
-
-(def db1
-  (-> (d/empty-db)
-      (d/db-with (shuffle [{:name "Ivan", :age 19 :sex "male"}
-                           {:name "Katerina", :sex "female"}
-                           {:name "Christine", :sex "female"}
-                           {:name "Bob", :sex "male"}
-                           {:name "Helen", :sex "female"}
-                           {:name "Susan", :sex "female"}
-                           {:name "Samantha", :sex "female"}
-                           {:name "Chlöe", :sex "female"}
-                           {:name "Jack", :sex "male"}
-                           {:name "John", :sex "male"}
-                           {:name "James", :sex "male"}
-                           {:name "Leo", :sex "male"}
-                           {:name "Fred", :sex "male"}]))))
-
-#_
-(d/reset-conn! global-database db1)
-
-
-(defn find-by-sex [sex]
-  (d/q `[:find ?name
-         :where
-         [?e :name ?name]
-         [?e :sex ~sex]]
-       db1))
-
-(find-by-sex "male")
-
-
-(def sample-entities
-  [{:db/id 1 :name "Ivan" :age 10}
-   {:db/id 2 :name "Eve"  :age 20}
-   {:db/id 3 :name "Oleg" :age 10}
-   {:db/id 4 :name "Sally" :age 20}])
-
-(def db (d/db-with (d/empty-db) sample-entities))
-
-(def age-rule '[(has-age? ?e ?age)
-                [?e :age ?age]])
-
-(def is-10-rule '[(is-ten ?e)
-                  [?e :age 10]])
-
-(d/q '[:find  ?name
-       :in $ ?age %
-       :where
-       (has-age? ?e ?age)
-       [?e :name ?name]]
-     db
-     20
-     [age-rule])
-
-
-
-(d/q '[:find ?id ?attr ?value
-       :in $ ?id
-       :where [2 ?attr ?value]]
-     db
-     3)
-
-(d/q '[:find  ?e ?a ?n
-       :where
-       [?e :age ?a]
-       [?e :name ?n]
-       [(= ?n "Ivan")]] db)
-
-(d/q '[:find  ?e ?a ?n
-       :where
-       [?e :age ?a]
-       [?e :name ?n]
-       [(re-find #"(?i)iv" ?n)]]
-     db)
-
-
-(-> (d/empty-db)
-      (d/db-with [{ :name "Ivan", :age 19 :sex "male"}
-                  { :name "Katerina", :sex "female"}]))
-
-
 
 :app
