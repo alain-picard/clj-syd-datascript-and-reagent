@@ -180,15 +180,34 @@
 
 (def sample-entities
   [{:db/id 1 :name "Ivan" :age 10}
-   {:db/id 2 :name "Ivan" :age 20}
+   {:db/id 2 :name "Eve"  :age 20}
    {:db/id 3 :name "Oleg" :age 10}
-   {:db/id 4 :name "Oleg" :age 20}])
+   {:db/id 4 :name "Sally" :age 20}])
 
 (def db (d/db-with (d/empty-db) sample-entities))
 
-(d/q '[:find  ?e ?a ?n
-       :where [?e :age ?a]
-       [?e :name ?n]] db)
+(def age-rule '[(has-age? ?e ?age)
+                [?e :age ?age]])
+
+(def is-10-rule '[(is-ten ?e)
+                  [?e :age 10]])
+
+(d/q '[:find  ?name
+       :in $ ?age %
+       :where
+       (has-age? ?e ?age)
+       [?e :name ?name]]
+     db
+     20
+     [age-rule])
+
+
+
+(d/q '[:find ?id ?attr ?value
+       :in $ ?id
+       :where [2 ?attr ?value]]
+     db
+     3)
 
 (d/q '[:find  ?e ?a ?n
        :where
