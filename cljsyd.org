@@ -1,4 +1,4 @@
-#+TITLE:  emacs, figwheels and clojurescripts, Oh my!
+#+TITLE:  datascript and reagent, a match made in heaven!
 #+AUTHOR:    Alain Picard
 #+EMAIL:     Dr.Alain.Picard@gmail.com
 #+REVEAL_THEME: moon
@@ -11,271 +11,41 @@
 #+OPTIONS: reveal_with_toc:nil
 
 
-
-* =emacsen=, =figwheels= and =clojurescripts=, Oh my!
+* =datascript= and =reagent=, a match made in heaven!
 
 #+REVEAL_HTML: <h3> Alain Picard </h3>
-#+REVEAL_HTML: <h4> CLJ-SYD Feb 2019 </h4>
+#+REVEAL_HTML: <h4> CLJ-SYD May 2019 </h4>
 
 #+BEGIN_NOTES
- - I tried to hack some clojurescript... and everything
-   had changed.  AGAIN.
- - who has used figwheel?
- - this talk is (largely) about its replacement
- - we will build a quick project
- - I will philosophize about iterative development,
-   what I consider the "figwheel" way vs the "lisp" way.
+ Speaker notes.
 #+END_NOTES
 
-* Why is a cljs REPL so complex?
+* datalog
 
+#+begin_quote
+Datalog is a declarative logic programming language that syntactically
+is a subset of Prolog.
+          ---Wikipedia
+#+end_quote
+
+Datalog is a fully /declarative/ language.
+
+* datomic
+
+A distributed database implementing (it's own syntax) of =datalog=.
 #+BEGIN_NOTES
- - This text lifted from the figwheel documentation page 
- - I don't understand how steps 4 & 5 work (cljs -> figwheel)
+ datalog doesn't specify a syntax, just an idea.
 #+END_NOTES
 
-The typical path of code that will ultimately evaluated in a Browser
-and eventually returned to an editor.
+* datascript
 
-: Editor Buffer
-: |
-: nREPL server                    - Clojure remote REPL 
-: |                                 network interface
-: |
-: Piggieback nREPL Middleware     - re-directs nREPL evals to 
-: |                                 ClojureScript Compiler
-: |
-: ClojureScript REPL Code         - compiles ClojureScript 
-: |                                 to JavaScript
-: |
-: Figwheel REPL Websocket Server  - pushes JavaScript to Browser
-: |
-: Browser                         - Figwheel REPL Client 
-: |                                 code evaluates JavaScript
-
-
-* =cider= and =clojurescript=
-
-As of version 0.18.0, we can now jack in directly
-into =clojurescript= from emacs/cider with the command
-
-#+BEGIN_QUOTE
-=C-c M-j= runs the
-command =cider-jack-in-clj=
-#+END_QUOTE
-
-: cider-version is a variable defined in ‘cider.el’.
-: Its value is "0.20.0"
-
-* Your =lein= may be out of date...
-
-#+BEGIN_QUOTE
-lein version
-
-Leiningen 2.8.3 on Java 1.8.0_144
-#+END_QUOTE
-
-
-* =figwheel= is dead.
-
-Long live =figwheel-main= !
-
-** =figwheel-main= Advantages
-
-#+BEGIN_QUOTE
-Figwheel Main is a complete re-write of 
-lein-figwheel and the following advantages:
-
-#+END_QUOTE
-
-  - Starts faster
-  - The Figwheel Main codebase is much smaller. A lot of attention was placed on minimizing dependencies and as a result it starts much faster.
-  - REPL connection
-
-** Advantages (continued)
-  - Figwheel Main’s REPL evaluates on just one connected JavaScript client whereas lein-figwheel’s REPL evaluated on all connected clients with the same build-id.
-  - Figwheel Main’s REPL will let you select which client environment to use when you have multiple connected clients.
-  - Minimal configuration
-  - Figwheel main makes intelligent choices for your ClojureScript compiler options. This allows you to get started with very little configuration.
-
-** Advantages (continued)
-  - Provides a cljs.main CLI interface
-  - Utilizing the same CLI from cljs.main saves you from having to learn yet another way to compile ClojureScript. It’s a design goal to keep the experience consistent between the two tools.
-  - The CLI is also much more expressive than lein-figwheel, which translates into less configuration. The CLI will allow you to create test builds and deployment builds without needing a separate configuration for each build.
-
-** Advantages (continued)
-  - Better Nodejs experience
-  - With Figwheel Main you can go from zero to a fully hot reloading Node workflow with very little configuration. Figwheel Main also starts a Node process for you when you launch a build.
-  - Simpler codebase
-
-** I care about only:
-  - Minimal configuration
-  - Figwheel main makes intelligent choices for your ClojureScript compiler options. This allows you to get started with very little configuration.
-  - With Figwheel Main you can go from zero to a fully hot reloading Node workflow with very little configuration. Figwheel Main also starts a Node process for you when you launch a build.
-
- 
-* Main user-visible changes
-
- - need this new file, called =dev.cljs.edn=,
-   where =dev= is the name of your build.
- - configuration is /vastly/ simpler.
-
-#+BEGIN_NOTES
-Real quick:
- - create a new project
- - copy my sample code
- - jack in clojurescript
- - note the type of repl being asked for
- - note the :dev vs dev bug
- - demonstrate running code interactively via emacs
- - demonstrate "normal" figwheel way of interacting,
-   which is via reloading
- - demonstrate what I like, which is the lisp way
-   of running one form at a time.
-
- - find that great picture which explains all the hoopla on how a form
-   is sent to JS and back.
-#+END_NOTES
-
-#+BEGIN_NOTES
-
-;; Dependencies
-[http-kit "2.3.0"]
-[quil "2.8.0"]
-
-;; require forms
-[quil.core :as q :include-macros true]
-[quil.middleware :as m]
-
-;; A place for the image
-[:canvas#host]
-
-(defn draw []
-  (q/background 255)
-  ; create image and draw gradient on it
-  (let [im (q/create-image 100 100 :rgb)]
-    (dotimes [x 100]
-      (dotimes [y 100] (q/set-pixel im x y (q/color (* 2 x) (* 2 y) (+ x y)))))
-    ; draw image twice
-    (q/image im 0 0)
-    (q/image im 50 50)))
-
-(defn load-sketch []
-  (q/defsketch my
-    :host "host"
-    :size [500 500]
-    :draw draw))
-
-(defn setup []
-  ; Set frame rate to 30 frames per second.
-  (q/frame-rate 60)
-  ; Set color mode to HSB (HSV) instead of default RGB.
-  (q/background 255 0 0)
-  (q/color-mode :hsb)
-  ; setup function returns initial state. It contains
-  ; circle color and position.
-  {:color 0
-   :angle 0})
-
-(defn update-state [state]
-  (-> state
-      (update :color #(mod (+ % 1) 255))
-      (update :angle + 0.05)))
-
-(def drawing? (atom true))
-
-(defn toggle-animation []
-  (swap! drawing? not))
-
-(defn handle-keystroke [k]
-  (println "Handling key " k)
-  (case k
-    :s (reset! drawing? false)
-    :g (reset! drawing? true)
-    (toggle-animation)))
-
-(def last-keypress? (atom nil))
-
-(defn draw-state [state]
-  (when (q/key-pressed?)
-    (when-not (= @last-keypress? (js/String (q/raw-key)))
-      (println "They hit " (q/raw-key) (q/key-as-keyword))
-      (handle-keystroke (q/key-as-keyword)))
-    (reset! last-keypress? (js/String (q/raw-key))))
-
-  (when @drawing?
-    (when (q/mouse-pressed?)
-      (q/background (rand 255) (rand 255) (rand 255)))
-
-    ;; Set circle color.
-    (q/fill (:color state) 255 255)
-    ;; Calculate x and y coordinates of the circle.
-    (let [angle (:angle state)
-          A 1.1
-          B .8
-          delta 90
-          x (* 100 (q/sin (+ delta (* A angle))))
-          y (* 100 (q/cos (* B angle)))]
-      ;; Move origin point to the center of the sketch.
-      (q/with-translation [(/ (q/width) 2)
-                           (/ (q/height) 2)]
-        (q/with-rotation [(* (/ -3.14159 4 -2) angle)]
-          (q/ellipse x y
-                     100
-                     50))))))
-
-; this function is called in index.html
-(defn run-sketch []
-  (q/defsketch my-sketch
-    :host "host"
-    :size [512 512]
-    :setup setup                    ; setup function called only once, during sketch initialization.
-    :update update-state            ; update-state is called on each iteration before draw-state.
-    :draw draw-state
-    :middleware [m/fun-mode]))
-
-(run-sketch)
-
-#+END_NOTES
-
-
-* Getting started
-
-Simplest way: use the =figwheel-main= template at 
-https://rigsomelight.com/figwheel-main-template/
-
-: lein new figwheel-main hello-world.core -- --reagent 
-:    # or --rum, --om, --react or nothing
+An /in-memory/, immutable implementation of datalog,
+using a syntax compatible with =datomic=.
 
 #+BEGIN_COMMENT
-
-I have a clean checkout in /home/ap/Play/cljsyd-02-2019/cljsyd-demo
-
-Go and view the produced project.clj file
-
 Make a note of the figwheel-main version; note
 it's buggy and the latest version is, also, still buggy.
 #+END_COMMENT
 
-
-
-
-
-* Odds and ends
-
-** Runtime /vs./ compile time inconsistencies
-The 
-: (+ 1 "foo")
-paradox.  We're not in Kansas anymore.
-
-** The built-in jetty server doesn't work.
-
-A workaround, use http-kit...
-
-#+BEGIN_NOTES
-
-[[file:src/hello_world/server.clj::(ns%20hello-world.server][Bring in
-server.cljs]]
-
-#+END_NOTES
-
+* 
+ Some code, with a =reagent= example!
