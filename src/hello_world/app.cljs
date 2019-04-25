@@ -4,19 +4,19 @@
    [goog.dom :as gdom]
    [reagent.core :as reagent]
    [datascript.db :as db]
-   [datascript.core :as d]
+   [datascript.core :as core :refer [transact! q]]
    [clojure.string :as s]))
 
 (enable-console-print!)
 
-(def global-database (d/create-conn {:name {:db/index true}}))
+(def global-database (core/create-conn {:name {:db/index true}}))
 
 ;; Heres the central trick --- reagent uses the famous ratom,
 ;; and we bind all changes to the global-database to update this ratom.
 
 (def current-db (reagent/atom nil))
 
-(d/listen! global-database
+(core/listen! global-database
            (fn [x]
              (println "They just did a txn: got back " (count (:db-after x)) " datoms.")
              (reset! current-db (:db-after x))))
@@ -29,13 +29,13 @@
   (let [pred (if (s/blank? s)
                (constantly true)
                #(re-find (re-pattern (str "(?i)" s)) %))]
-    (d/q '[:find ?name ?e
-           :in $ ?pred
-           :where
-           [?e :name ?name]
-           [(?pred ?name)]]
-         db
-         pred)))
+    (q '[:find ?name ?e
+         :in $ ?pred
+         :where
+         [?e :name ?name]
+         [(?pred ?name)]]
+       db
+       pred)))
 
 
 ;;;;  Page rendering
@@ -47,8 +47,8 @@
     (for [[x id] (take 10 hits)]
       ^{:key (str "entity-" id)}
       [:li {:on-click (fn [_]
-                        (d/transact! global-database
-                                     [[:db/retract id :name x]]))}
+                        (transact! global-database
+                                   [[:db/retract id :name x]]))}
        x])]])
 
 (defn sample-filtered-list []
@@ -66,7 +66,7 @@
    [:h3.inline.text-info "Insert new names here"]
    [:input {:type :text
             :on-blur (fn [e]
-                       (d/transact! global-database
+                       (core/transact! global-database
                                     [[:db/add -1 :name (-> e .-target .-value)]])
                        ;; Clear the text input.
                        (set! (-> e .-target .-value) nil))}]])
@@ -84,10 +84,10 @@
   (reagent/render-component [hello-world] (gdom/getElement "app")))
 
 (defn initialize-database! []
- (d/transact! global-database sample-names))
+ (core/transact! global-database sample-names))
 
 (defn fill-database! [n]
-   (d/transact! global-database
+   (core/transact! global-database
                 (repeatedly n #(hash-map :name (str (cljs.core/random-uuid ))
                                          :sex (rand-nth ["male" "female"])))))
 

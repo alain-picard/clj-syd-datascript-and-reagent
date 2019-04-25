@@ -41,13 +41,11 @@
        [?e :sex "female"]]
      @global-database)
 
-
 ;; Take a subsample
 (d/q '[:find (sample 3 ?e)
         :where
         [?e :name ?name]]
       @global-database)
-
 
 ;; Another operator...
 (d/q '[:find (count ?e)
@@ -56,52 +54,63 @@
        [?e :sex "female"]]
       @global-database)
 
-
-;; Return query results as a map with the desired keys
+
+;;;; The `pull' operator:
+;;;;
+;;
+;; Returns query results as a map with the desired keys
 (d/q '[:find (pull ?e [:name :sex])
        :where
-       [?e :name ?name]
-       [?e :name]]
+          [?e :name ?name]
+          [?e :name]]
      @global-database)
 
+
 
-;; "Full" syntax
+
+;;;; "Full" syntax
+
 (d/q '[:find ?name
        :in $ ?gender
        :where
-       [?e :name ?name]
-       [?e :sex ?gender]]
+         [?e :name ?name]
+         [?e :sex ?gender]]
      @global-database       ; <== This token gets bound to $ (the DB against which to run the query)
      "female")              ; <== This token gets bound to ?gender
+
+
+
 
 ;; Full syntax allows you to do cool things, like supply
 ;; predicates dynamically, e.g.
 
 ;; Give me the name of all MALES with a name starting with the letter "B" ?
 (d/q '[:find ?name
-       :in $ ?gender ?pred ?starting-letter
+       :in $            ; bound to the database
+       ?gender          ; bound to "male"
+       ?pred            ; bound to clojure.string/starts-with?
+       ?starting-letter ; bound to "B"
        :where
-       [?e :name ?name]
-       [?e :sex ?gender]
-       [(?pred ?name ?starting-letter)]]
+         [?e :name ?name]
+         [?e :sex ?gender]
+         [(?pred ?name ?starting-letter)]]
+     ;; The binding values follow:
      @global-database
      "male"
      clojure.string/starts-with?
      "B")
 
 
-;;;; Rules
-
+;;;; Rules  -- taming the verbosity
 
 ;; Suppose we are interested in young males:
 
 (d/q '[:find ?name ?age
-       :in $ ?gender ?pred ?starting-letter ?age-pred ?age-val
        :where
-       [?e :name ?name]
-       [?e :sex "male"]
-       [?e :age ?age]
-       [(< ?age 20)]]
+         [?e :name ?name]
+         [?e :sex "male"]
+         [?e :age ?age]
+         [(< ?age 20)]]
      @global-database)
 
 ;; We can encapsulate this as a rule;
@@ -119,7 +128,7 @@
        [?e :name ?name]
        (is-young-male? ?e)] ; <== uses new expression type.
      @global-database
-     [young-male-rule]) ; <== Rules which supply new expressions supplied here
+     [young-male-rule]) ; <== List of Rules which supply new expressions supplied here
 
 
 
@@ -129,14 +138,21 @@
 (def riding-the-limit-rule '[(barely-legal? ?e)
                              [?e :age 19]])
 
+(def pull-over-rule
+  '[(pullover? ?e ?age)
+    (is-young-male? ?e ?age)
+    (barely-legal? ?e)])
+
 (def nsw-police-ruleset
   [young-male-rule
-   riding-the-limit-rule])
+   riding-the-limit-rule
+   pull-over-rule])
 
-(d/q '[:find (pull ?e [:name :sex :age])
-       :in $ % ; <==  % (percent) is magic, like $, and means "the set of rules to parse".
+(d/q '[:find (pull ?e [:name :sex :age]) :in $ %
        :where
-       [?e :name ?name]
-       (barely-legal? ?e)] ; <== uses new expression type.
+          [?e :name ?name]
+          (pullover? ?e ?age)]
      @global-database
      nsw-police-ruleset)
+
+;;; The END

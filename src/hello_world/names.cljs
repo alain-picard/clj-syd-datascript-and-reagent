@@ -4,13 +4,14 @@
                    {:name "Aletha" :sex "female" :age 31}
                    {:name "Amina" :sex "female" :age 19}
                    {:name "Anderson" :sex "male" :age 19}
-                   {:name "Arnold" :sex "male" :age 29}
-                   {:name "August" :sex "male"}
-                   {:name "Benito" :sex "male"}
-                   {:name "Bob", :sex "male"}
-                   {:name "Brett" :sex "male"}
-                   {:name "Brittni" :sex "female"}
-                   {:name "Carletta" :sex "female"}
+                   {:name "Arnold" :sex "male" :age 41}
+                   {:name "August" :sex "male" :age 8}
+                   {:name "Benito" :sex "male" :age 12}
+                   {:name "Bob", :sex "male" :age 33}
+                   {:name "Brett" :sex "male" :age 20}
+                   {:name "Brittni" :sex "female" :age 21}
+
+                   {:name "Carletta" :sex "female"} ;; 11th...
                    {:name "Carrol" :sex "male"}
                    {:name "Cedric" :sex "male"}
                    {:name "Charles" :sex "male"}
