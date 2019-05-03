@@ -1,4 +1,4 @@
-#+TITLE:  datascript and reagent, a match made in heaven!
+#+TITLE:  =datascript=, and a little =reagent=...
 #+AUTHOR:    Alain Picard
 #+EMAIL:     Dr.Alain.Picard@gmail.com
 #+REVEAL_THEME: moon
@@ -10,8 +10,12 @@
 #+OPTIONS: reveal_control:nil
 #+OPTIONS: reveal_with_toc:nil
 
+#+BEGIN_COMMENT
+Probably want to evaluate the code in [[file:~/Play/poker/resources/keys.el::;;;%20%25F%20---%20%25%5BBrief%20description%20of%20package:%20%25%5D][keys.el]]
+#+END_COMMENT
 
-* =datascript= and =reagent=, a match made in heaven!
+
+* =datascript=, and a little =reagent=...
 
 #+REVEAL_HTML: <h3> Alain Picard </h3>
 #+REVEAL_HTML: <h4> CLJ-SYD May 2019 </h4>
@@ -28,7 +32,8 @@ is a subset of Prolog.
           ---Wikipedia
 #+end_quote
 
-Datalog is a fully /declarative/ language.
+ - Datalog is a fully /declarative/ language.
+ - It can express the full extent of the relational calculus
 
 * datomic
 
@@ -47,5 +52,25 @@ Make a note of the figwheel-main version; note
 it's buggy and the latest version is, also, still buggy.
 #+END_COMMENT
 
-* 
- Some code, with a =reagent= example!
+* when to use?
+
+When you're starting to have /lots/ of =update-in=, =get-in= /etc/...
+you might need =datascript=.
+
+If you're starting to keep your own indices, definitely look into it.
+
+* =datascript= in action
+#+BEGIN_COMMENT
+[[file:src/hello_world/datascript.cljs::(ns%20hello-world.datascript][datascript in action]]
+#+END_COMMENT
+
+
+* =datascript= as source of truth in a =reagent= app
+
+#+BEGIN_COMMENT
+[[file:src/hello_world/app.cljs::(ns%20^:figwheel-hooks%20hello-world.app][a reagent example]]
+#+END_COMMENT
+
+Some code, with a =reagent= example!
+
+This code and presentation are available here: https://github.com/alain-picard/clj-syd-datascript-and-reagent
