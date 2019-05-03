@@ -9,79 +9,107 @@
 
 (enable-console-print!)
 
+
+;;; Using a datascript in-memory db as the value Reagent reacts to:
+
 (def global-database (core/create-conn {:name {:db/index true}}))
+
+(def current-db (reagent/atom nil))
 
 ;; Heres the central trick --- reagent uses the famous ratom,
 ;; and we bind all changes to the global-database to update this ratom.
-
-(def current-db (reagent/atom nil))
 
 (core/listen! global-database
            (fn [x]
              (println "They just did a txn: got back " (count (:db-after x)) " datoms.")
              (reset! current-db (:db-after x))))
 
+
+;;; Now we need functions to inspect and modify our database:
+
+(defn add-entry! [name]
+  (transact! global-database [[:db/add -1 :name name]]))
+
+(defn delete-entry! [id name]
+  (transact! global-database [[:db/retract id :name name]]))
+
 (defn all-names-matching
-  "Returns all names in the DB matching the string S.
-   Will return every name if S is blank."
+  "Returns a seq of  [name id] pairs for all
+  entries in the DB matching the string S.
+  Will return every name if S is blank."
   [s db]
   (println  "Matching for string " s)
-  (let [pred (if (s/blank? s)
-               (constantly true)
-               #(re-find (re-pattern (str "(?i)" s)) %))]
-    (q '[:find ?name ?e
-         :in $ ?pred
-         :where
-         [?e :name ?name]
-         [(?pred ?name)]]
-       db
-       pred)))
+  (q '[:find ?name ?e
+       :in $ ?pred
+       :where
+       [?e :name ?name]
+       [(?pred ?name)]]
+     db
+     #(re-find (re-pattern (str "(?i)^\\s+$|" s)) %)))
+
+#_ ; e.g.
+(all-names-matching "sh" @current-db)
+
 
 
 ;;;;  Page rendering
 
-(defn render-hits [hits]
-  [:div
-   [:h4 "Filtered list"]
-   [:ul
-    (for [[x id] (take 10 hits)]
-      ^{:key (str "entity-" id)}
-      [:li {:on-click (fn [_]
-                        (transact! global-database
-                                   [[:db/retract id :name x]]))}
-       x])]])
+(defn val-of [node] (-> node .-target .-value))
 
-(defn sample-filtered-list []
+(defn render-hits
+  [hits]
+  [:div.bg-info
+   [:h1 "Filtered list (populated from @current-db)"]
+   [:div.bg-primary
+    [:ul
+     (for [[name id] (take 10 hits)]
+       ^{:key (str "entity-" id)}
+       [:li {:on-click #(delete-entry! id name)}
+        [:strong name]])]]])
+
+(defn selected-names-component []
   (let  [text (reagent/atom "")]
     (fn []
-     [:div#ctrl
-      [:h3.inline.text-info "Filter string:"]
-      [:input {:type :text
-               :on-change (fn [e] (reset! text (-> e .-target .-value)))}]
-      [:span.h3 "    The database currently contains " [:span.h3.text-warning (count @current-db)] " datoms." ]
-      [render-hits (all-names-matching @text @current-db)]])))
+      [:div
+       [:div.form-group
+        [:label.col-sm-2  {:for "filter"} "Filter string:"]
+        [:input.col-sm-4.col-push-6
+         {:id "filter"
+          :type :text
+          :on-change #(reset! text (val-of %))}]
+        [:h3.form-text.text-muted.pull-right
+         "The database currently contains " [:mark (count @current-db)] " datoms."]]
+       [render-hits (all-names-matching @text @current-db)]])))
 
 (defn insert-data-component []
-  [:div#insert
-   [:h3.inline.text-info "Insert new names here"]
-   [:input {:type :text
-            :on-blur (fn [e]
-                       (core/transact! global-database
-                                    [[:db/add -1 :name (-> e .-target .-value)]])
-                       ;; Clear the text input.
-                       (set! (-> e .-target .-value) nil))}]])
+  [:div.form-group
+   [:label.col-sm-2  {:for "new-name-field"} "Insert new names here"]
+   [:input.col-sm-4.col-push-6
+    {:id "new-name-field"
+     :type :text
+     :on-blur (fn [node]
+                (add-entry! (val-of node))
+                ;; Clear the text input.
+                (reset! (val-of node) nil))}]])
 
-(defn hello-world []
-  [:div#hello
-   [:h1.text-primary "Example Reagent and Datascript application"]
-   [insert-data-component]
-   [sample-filtered-list]])
+;;;; Boilerplate reagent stuff here...
+
+(defn app-component []
+  [:div.container
+   [:div.jumbotron
+    [:h1.text-center
+     [:div.text-primary "Example Reagent"]
+     [:div [:small  "and"]]
+     [:div.text-primary "Datascript application"]]]
+   [:form.form-horizontal
+    [insert-data-component]
+    [selected-names-component]]])
 
 (defn mount [component el]
   (reagent/render-component component el))
 
 (defn mount-app-element []
-  (reagent/render-component [hello-world] (gdom/getElement "app")))
+  (reagent/render-component [app-component] (gdom/getElement "app")))
 
 (defn initialize-database! []
  (core/transact! global-database sample-names))

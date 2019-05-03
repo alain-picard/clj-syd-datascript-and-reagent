@@ -9,8 +9,8 @@
 (def global-database
   (d/create-conn {:name {:db/index true}}))
 
-#_
-(d/transact! global-database (take 10 sample-names))
+(defonce some-dummy-data
+ (d/transact! global-database (take 10 sample-names)))
 
 ;; Find the ID of user named "Bob"
 (d/q '[:find ?e
@@ -144,7 +144,7 @@
     (barely-legal? ?e)])
 
 (def nsw-police-ruleset
-  [young-male-rule
+  [young-male-rule ; Must include ALL rules, recursively, that parser will need.
    riding-the-limit-rule
    pull-over-rule])
 

@@ -1,7 +1,7 @@
 (ns hello-world.names)
 
 (def sample-names [{:name "Alberto" :sex "male" :age 17}
-                   {:name "Aletha" :sex "female" :age 31}
+                   {:name "Alice" :sex "female" :age 31}
                    {:name "Amina" :sex "female" :age 19}
                    {:name "Anderson" :sex "male" :age 19}
                    {:name "Arnold" :sex "male" :age 41}
