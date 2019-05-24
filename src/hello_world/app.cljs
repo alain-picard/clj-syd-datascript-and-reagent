@@ -1,6 +1,7 @@
 (ns ^:figwheel-hooks hello-world.app
   (:require
    [hello-world.names :refer [sample-names]]
+   [hello-world.queries :as queries]
    [goog.dom :as gdom]
    [reagent.core :as reagent]
    [datascript.db :as db]
@@ -28,10 +29,16 @@
 ;;; Now we need functions to inspect and modify our database:
 
 (defn add-entry! [name]
-  (transact! global-database [[:db/add -1 :name name]]))
+  (transact! global-database [[:db/add -1 :name name
+                               ;; Gender and age are just fake for now.
+                               [:db/add -1 :sex "male"]
+                               [:db/add -1 :age (rand-nth (range 10 89))]]]))
 
 (defn delete-entry! [id name]
   (transact! global-database [[:db/retract id :name name]]))
+
+(defn build-pred [string]
+  #(re-find (re-pattern (str "(?i)^\\s+$|" string)) %))
 
 (defn all-names-matching
   "Returns a seq of  [name id] pairs for all
@@ -39,16 +46,7 @@
   Will return every name if S is blank."
   [s db]
   (println  "Matching for string " s)
-  (q '[:find ?name ?e
-       :in $ ?pred
-       :where
-       [?e :name ?name]
-       [(?pred ?name)]]
-     db
-     #(re-find (re-pattern (str "(?i)^\\s+$|" s)) %)))
-
-#_ ; e.g.
-(all-names-matching "sh" @current-db)
+  (queries/all-matching-persons-by-name db (build-pred s)))
 
 
 
@@ -62,7 +60,7 @@
    [:h1 "Filtered list (populated from @current-db)"]
    [:div.bg-primary
     [:ul
-     (for [[name id] (take 10 hits)]
+     (for [{:keys [:name :db/id]} (take 10 hits)]
        ^{:key (str "entity-" id)}
        [:li {:on-click #(delete-entry! id name)}
         [:strong name]])]]])
@@ -90,7 +88,7 @@
      :on-blur (fn [node]
                 (add-entry! (val-of node))
                 ;; Clear the text input.
-                (reset! (val-of node) nil))}]])
+                (set!  (-> node .-target .-value) ""))}]])
 
 ;;;; Boilerplate reagent stuff here...
 
@@ -136,3 +134,33 @@
     (mount-app-element)))
 
 :app
+
+(q '[:find ?e ; ?name
+        :where
+     [?e :name "Alice"]
+     ;[?name :name ]
+     ]
+   @global-database)
+
+(q '[:find ?name ?e
+      :in $ ?pred
+      :where
+      [?e :name ?name]
+      [(?pred ?name)]]
+    @current-db
+    #(re-find (re-pattern (str "(?i)^\\s+$|" "al")) %))
+
+
+(q
+ '[:find
+   (pull ?e [:db/id :age :name :sex])
+   :in
+   $
+   ?pred
+   :where
+   ;; [?e :age ?age]
+   [?e :name ?name]
+   ;; [?e :sex ?sex]
+   [(?pred ?name)]]
+ @current-db
+ (build-pred "albo"))
