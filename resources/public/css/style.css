@@ -1,12 +1,31 @@
 /* some style */
 
-html {
-    background : #238;
+html, #app {
+    background : #744994;
 }
 
-h1sd
+label {
+    color: #fff;
+    font-size: 2.0ex;
+}
+
+h1
 {font-family : courier, sans;
  color : #0c0eee}
+
+h1.db-status {
+    color : #fff;
+}
+
+div.jumbotron {
+    color: #2020c5;
+    margin-top: 5ex;
+}
+
+div.filtered-list {
+    font-size: 3ex;
+    font-family: Helvetica;
+}
 
 div#hello
 {

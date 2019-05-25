@@ -56,8 +56,8 @@
 (defn render-hits
   [hits]
   [:div.bg-info
-   [:h1 "Filtered list (populated from @current-db)"]
-   [:div.bg-primary
+   [:h1.text-center "Filtered list (populated from @current-db)"]
+   [:div.bg-primary.filtered-list
     [:ul
      (for [{:keys [:name :db/id]} (take 10 hits)]
        ^{:key (str "entity-" id)}
@@ -74,7 +74,7 @@
          {:id "filter"
           :type :text
           :on-change #(reset! text (val-of %))}]
-        [:h3.form-text.text-muted.pull-right
+        [:h1.form-text.pull-right.db-status
          "The database currently contains " [:mark (count @current-db)] " datoms."]]
        [render-hits (all-names-matching @text @current-db)]])))
 
