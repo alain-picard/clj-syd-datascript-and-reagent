@@ -9,7 +9,7 @@
 (def global-database
   (d/create-conn {:name {:db/index true}}))
 
-(defonce some-dummy-data
+(def some-dummy-data
  (d/transact! global-database (take 10 sample-names)))
 
 ;; Find the ID of user named "Bob"
@@ -61,7 +61,12 @@
 ;; Returns query results as a map with the desired keys
 (d/q '[:find (pull ?e [:name :sex])
        :where
-          [?e :name ?name]
+       [?e]] ; Finds all of them
+     @global-database)
+
+(d/q '[:find (pull ?e [:name :sex :age])
+       :where
+          [?e :name "Alice"] ; Finds only alice
           [?e :name]]
      @global-database)
 
