@@ -29,10 +29,10 @@
 ;;; Now we need functions to inspect and modify our database:
 
 (defn add-entry! [name]
-  (transact! global-database [[:db/add -1 :name name
-                               ;; Gender and age are just fake for now.
-                               [:db/add -1 :sex "male"]
-                               [:db/add -1 :age (rand-nth (range 10 89))]]]))
+  (transact! global-database [[:db/add -1 :name name]
+                              ;; Gender and age are just fake for now.
+                              [:db/add -1 :sex "male"]
+                              [:db/add -1 :age (rand-nth (range 10 89))]]))
 
 (defn delete-entry! [id name]
   (transact! global-database [[:db/retract id :name name]]))
@@ -48,6 +48,9 @@
   (println  "Matching for string " s)
   (queries/all-matching-persons-by-name db (build-pred s)))
 
+(all-names-matching "aa" @current-db)
+
+(add-entry! "Aaron")
 
 
 ;;;;  Page rendering
@@ -134,33 +137,3 @@
     (mount-app-element)))
 
 :app
-
-(q '[:find ?e ; ?name
-        :where
-     [?e :name "Alice"]
-     ;[?name :name ]
-     ]
-   @global-database)
-
-(q '[:find ?name ?e
-      :in $ ?pred
-      :where
-      [?e :name ?name]
-      [(?pred ?name)]]
-    @current-db
-    #(re-find (re-pattern (str "(?i)^\\s+$|" "al")) %))
-
-
-(q
- '[:find
-   (pull ?e [:db/id :age :name :sex])
-   :in
-   $
-   ?pred
-   :where
-   ;; [?e :age ?age]
-   [?e :name ?name]
-   ;; [?e :sex ?sex]
-   [(?pred ?name)]]
- @current-db
- (build-pred "albo"))

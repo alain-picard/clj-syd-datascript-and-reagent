@@ -11,107 +11,107 @@
                    {:name "Brett" :sex "male" :age 20}
                    {:name "Brittni" :sex "female" :age 21}
 
-                   {:name "Carletta" :sex "female"} ;; 11th...
-                   {:name "Carrol" :sex "male"}
-                   {:name "Cedric" :sex "male"}
-                   {:name "Charles" :sex "male"}
-                   {:name "Cheryle" :sex "female"}
-                   {:name "Chet" :sex "male"}
-                   {:name "Chlöe", :sex "female"}
-                   {:name "Christia" :sex "female"}
-                   {:name "Christine", :sex "female"}
-                   {:name "Cristal" :sex "female"}
-                   {:name "Dana" :sex "male"}
-                   {:name "Danial" :sex "male"}
-                   {:name "Dawn" :sex "female"}
-                   {:name "Dessie" :sex "female"}
-                   {:name "Eduardo" :sex "male"}
-                   {:name "Elaine" :sex "female"}
-                   {:name "Emanuel" :sex "male"}
-                   {:name "Emery" :sex "male"}
-                   {:name "Emily" :sex "female"}
-                   {:name "Ethel" :sex "female"}
-                   {:name "Everett" :sex "male"}
-                   {:name "Evon" :sex "female"}
-                   {:name "Fabian" :sex "male"}
-                   {:name "Fausto" :sex "male"}
-                   {:name "Federico" :sex "male"}
-                   {:name "Felix" :sex "male"}
-                   {:name "Fernanda" :sex "female"}
-                   {:name "Ferne" :sex "female"}
-                   {:name "Fidel" :sex "male"}
-                   {:name "Florentino" :sex "male"}
-                   {:name "Fred", :sex "male"}
-                   {:name "Fredric" :sex "male"}
-                   {:name "Gordon" :sex "male"}
-                   {:name "Greg" :sex "male"}
-                   {:name "Gwen" :sex "female"}
-                   {:name "Hans" :sex "male"}
-                   {:name "Helen", :sex "female"}
-                   {:name "Hiram" :sex "male"}
-                   {:name "Hugo" :sex "male"}
+                   {:name "Carletta" :sex "female" :age 25} ;; 11th...
+                   {:name "Carrol" :sex "male" :age 25}
+                   {:name "Cedric" :sex "male" :age 25}
+                   {:name "Charles" :sex "male" :age 25}
+                   {:name "Cheryle" :sex "female" :age 25}
+                   {:name "Chet" :sex "male" :age 25}
+                   {:name "Chlöe", :sex "female" :age 25}
+                   {:name "Christia" :sex "female" :age 25}
+                   {:name "Christine", :sex "female" :age 25}
+                   {:name "Cristal" :sex "female" :age 25}
+                   {:name "Dana" :sex "male" :age 25}
+                   {:name "Danial" :sex "male" :age 25}
+                   {:name "Dawn" :sex "female" :age 25}
+                   {:name "Dessie" :sex "female" :age 25}
+                   {:name "Eduardo" :sex "male" :age 25}
+                   {:name "Elaine" :sex "female" :age 25}
+                   {:name "Emanuel" :sex "male" :age 25}
+                   {:name "Emery" :sex "male" :age 25}
+                   {:name "Emily" :sex "female" :age 25}
+                   {:name "Ethel" :sex "female" :age 25}
+                   {:name "Everett" :sex "male" :age 25}
+                   {:name "Evon" :sex "female" :age 25}
+                   {:name "Fabian" :sex "male" :age 25}
+                   {:name "Fausto" :sex "male" :age 25}
+                   {:name "Federico" :sex "male" :age 25}
+                   {:name "Felix" :sex "male" :age 25}
+                   {:name "Fernanda" :sex "female" :age 25}
+                   {:name "Ferne" :sex "female" :age 25}
+                   {:name "Fidel" :sex "male" :age 25}
+                   {:name "Florentino" :sex "male" :age 25}
+                   {:name "Fred", :sex "male" :age 25}
+                   {:name "Fredric" :sex "male" :age 25}
+                   {:name "Gordon" :sex "male" :age 25}
+                   {:name "Greg" :sex "male" :age 25}
+                   {:name "Gwen" :sex "female" :age 25}
+                   {:name "Hans" :sex "male" :age 25}
+                   {:name "Helen", :sex "female" :age 25}
+                   {:name "Hiram" :sex "male" :age 25}
+                   {:name "Hugo" :sex "male" :age 25}
                    {:name "Ivan", :age 19 :sex "male"}
-                   {:name "Jack", :sex "male"}
-                   {:name "Jackson" :sex "male"}
-                   {:name "Jacquelyne" :sex "female"}
-                   {:name "James", :sex "male"}
-                   {:name "Jeanmarie" :sex "female"}
-                   {:name "Jill", :sex "female"}
-                   {:name "Joanne" :sex "female"}
-                   {:name "Jodi" :sex "female"}
-                   {:name "John", :sex "male"}
-                   {:name "Jonathon" :sex "male"}
-                   {:name "Julio" :sex "male"}
-                   {:name "Justina" :sex "female"}
-                   {:name "Katerina", :sex "female"}
-                   {:name "Lamar" :sex "male"}
-                   {:name "Larae" :sex "female"}
-                   {:name "Lela" :sex "female"}
-                   {:name "Leo", :sex "male"}
-                   {:name "Leonora" :sex "female"}
-                   {:name "Lesley" :sex "male"}
-                   {:name "Lidia" :sex "female"}
-                   {:name "Lien" :sex "female"}
-                   {:name "Lise" :sex "female"}
-                   {:name "Lonnie" :sex "male"}
-                   {:name "Lorenzo" :sex "male"}
-                   {:name "Lorriane" :sex "female"}
-                   {:name "Luana" :sex "female"}
-                   {:name "Lucas" :sex "male"}
-                   {:name "Ma" :sex "female"}
-                   {:name "Major" :sex "male"}
-                   {:name "Margit" :sex "female"}
-                   {:name "Margret" :sex "female"}
-                   {:name "Mariam" :sex "female"}
-                   {:name "Marlo" :sex "female"}
-                   {:name "Melany" :sex "female"}
-                   {:name "Meridith" :sex "female"}
-                   {:name "Micheal" :sex "male"}
-                   {:name "Mohamed" :sex "male"}
-                   {:name "Nydia" :sex "female"}
-                   {:name "Paul" :sex "male"}
-                   {:name "Peter" :sex "male"}
-                   {:name "Raleigh" :sex "male"}
-                   {:name "Renaldo" :sex "male"}
-                   {:name "Rochelle" :sex "female"}
-                   {:name "Romeo" :sex "male"}
-                   {:name "Ruthe" :sex "female"}
-                   {:name "Samantha", :sex "female"}
-                   {:name "Sebrina" :sex "female"}
-                   {:name "Shala" :sex "female"}
-                   {:name "Shannon" :sex "male"}
-                   {:name "Sharolyn" :sex "female"}
-                   {:name "Sherrell" :sex "female"}
-                   {:name "Sherrill" :sex "female"}
-                   {:name "Sondra" :sex "female"}
-                   {:name "Susan", :sex "female"}
-                   {:name "Tandra" :sex "female"}
-                   {:name "Tarah" :sex "female"}
-                   {:name "Tarsha" :sex "female"}
-                   {:name "Tequila" :sex "female"}
-                   {:name "Tessie" :sex "female"}
-                   {:name "Trey" :sex "male"}
-                   {:name "Ulysses" :sex "male"}
-                   {:name "Vern" :sex "male"}
-                   {:name "Warner" :sex "male"}
-                   {:name "Wilber" :sex "male"}])
+                   {:name "Jack", :sex "male" :age 25}
+                   {:name "Jackson" :sex "male" :age 25}
+                   {:name "Jacquelyne" :sex "female" :age 25}
+                   {:name "James", :sex "male" :age 25}
+                   {:name "Jeanmarie" :sex "female" :age 25}
+                   {:name "Jill", :sex "female" :age 25}
+                   {:name "Joanne" :sex "female" :age 25}
+                   {:name "Jodi" :sex "female" :age 25}
+                   {:name "John", :sex "male" :age 25}
+                   {:name "Jonathon" :sex "male" :age 25}
+                   {:name "Julio" :sex "male" :age 25}
+                   {:name "Justina" :sex "female" :age 25}
+                   {:name "Katerina", :sex "female" :age 25}
+                   {:name "Lamar" :sex "male" :age 25}
+                   {:name "Larae" :sex "female" :age 25}
+                   {:name "Lela" :sex "female" :age 25}
+                   {:name "Leo", :sex "male" :age 25}
+                   {:name "Leonora" :sex "female" :age 25}
+                   {:name "Lesley" :sex "male" :age 25}
+                   {:name "Lidia" :sex "female" :age 25}
+                   {:name "Lien" :sex "female" :age 25}
+                   {:name "Lise" :sex "female" :age 25}
+                   {:name "Lonnie" :sex "male" :age 25}
+                   {:name "Lorenzo" :sex "male" :age 25}
+                   {:name "Lorriane" :sex "female" :age 25}
+                   {:name "Luana" :sex "female" :age 25}
+                   {:name "Lucas" :sex "male" :age 25}
+                   {:name "Ma" :sex "female" :age 25}
+                   {:name "Major" :sex "male" :age 25}
+                   {:name "Margit" :sex "female" :age 25}
+                   {:name "Margret" :sex "female" :age 25}
+                   {:name "Mariam" :sex "female" :age 25}
+                   {:name "Marlo" :sex "female" :age 25}
+                   {:name "Melany" :sex "female" :age 25}
+                   {:name "Meridith" :sex "female" :age 25}
+                   {:name "Micheal" :sex "male" :age 25}
+                   {:name "Mohamed" :sex "male" :age 25}
+                   {:name "Nydia" :sex "female" :age 25}
+                   {:name "Paul" :sex "male" :age 25}
+                   {:name "Peter" :sex "male" :age 25}
+                   {:name "Raleigh" :sex "male" :age 25}
+                   {:name "Renaldo" :sex "male" :age 25}
+                   {:name "Rochelle" :sex "female" :age 25}
+                   {:name "Romeo" :sex "male" :age 25}
+                   {:name "Ruthe" :sex "female" :age 25}
+                   {:name "Samantha", :sex "female" :age 25}
+                   {:name "Sebrina" :sex "female" :age 25}
+                   {:name "Shala" :sex "female" :age 25}
+                   {:name "Shannon" :sex "male" :age 25}
+                   {:name "Sharolyn" :sex "female" :age 25}
+                   {:name "Sherrell" :sex "female" :age 25}
+                   {:name "Sherrill" :sex "female" :age 25}
+                   {:name "Sondra" :sex "female" :age 25}
+                   {:name "Susan", :sex "female" :age 25}
+                   {:name "Tandra" :sex "female" :age 25}
+                   {:name "Tarah" :sex "female" :age 25}
+                   {:name "Tarsha" :sex "female" :age 25}
+                   {:name "Tequila" :sex "female" :age 25}
+                   {:name "Tessie" :sex "female" :age 25}
+                   {:name "Trey" :sex "male" :age 25}
+                   {:name "Ulysses" :sex "male" :age 25}
+                   {:name "Vern" :sex "male" :age 25}
+                   {:name "Warner" :sex "male" :age 25}
+                   {:name "Wilber" :sex "male" :age 25}])

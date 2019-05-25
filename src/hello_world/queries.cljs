@@ -2,6 +2,8 @@
   (:require [datascript.core :as d]))
 
 
+;;;;;; GENERATED : DO NOT EDIT!! ;;;;;
+
 (def person-pull [:age :name :sex])
 (def person-query '[:find (pull ?e []) :where])
 (defn find-persons [db] (->> db (d/q person-query) (map first)))
@@ -17,7 +19,9 @@
       $
       ?pred
       :where
+      [?e :age ?age]
       [?e :name ?name]
+      [?e :sex ?sex]
       [(?pred ?name)]]
     db)
    (map first)
