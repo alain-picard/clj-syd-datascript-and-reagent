@@ -48,10 +48,6 @@
   (println  "Matching for string " s)
   (queries/all-matching-persons-by-name db (build-pred s)))
 
-(all-names-matching "aa" @current-db)
-
-(add-entry! "Aaron")
-
 
 ;;;;  Page rendering
 
@@ -118,6 +114,7 @@
 (defn fill-database! [n]
    (core/transact! global-database
                 (repeatedly n #(hash-map :name (str (cljs.core/random-uuid ))
+                                         :age (rand-nth (range 10 89))
                                          :sex (rand-nth ["male" "female"])))))
 
 
