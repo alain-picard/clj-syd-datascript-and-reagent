@@ -11,7 +11,8 @@ label {
 
 h1
 {font-family : courier, sans;
- color : #0c0eee}
+ color : #0c0eee;
+}
 
 h1.db-status {
     color : #fff;
@@ -38,4 +39,17 @@ h3.inline
 {
     display: inline;
     padding-right: 1em;
+}
+
+span.text-regular {
+    color: #fff;
+}
+
+span.text-match {
+    color: #f0ad4e;
+}
+
+h1.title, div.filtered-list  {
+ padding-top: 2ex;
+ padding-bottom: 2ex;
 }

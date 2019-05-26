@@ -53,16 +53,28 @@
 
 (defn val-of [node] (-> node .-target .-value))
 
+(defn render-hit [string match]
+  (let [start    (.indexOf (.toLowerCase string) (.toLowerCase match))
+        end      (+ start (count match))
+        leading  (subs string 0 start)
+        matched  (subs string start end)
+        trailing (subs string end)]
+   [:span
+    [:span.text-regular leading]
+    [:span.text-match matched]
+    [:span.text-regular trailing]]))
+
 (defn render-hits
-  [hits]
+  [hits match]
   [:div.bg-info
-   [:h1.text-center "Filtered list (populated from @current-db)"]
+   [:h1.text-center.title "Filtered list (populated from @current-db)"]
    [:div.bg-primary.filtered-list
     [:ul
      (for [{:keys [:name :db/id]} (take 10 hits)]
        ^{:key (str "entity-" id)}
-       [:li {:on-click #(delete-entry! id name)}
-        [:strong name]])]]])
+       [:li {:title "Click to delete"
+             :on-click #(delete-entry! id name)}
+        [render-hit name match]])]]])
 
 (defn selected-names-component []
   (let  [text (reagent/atom "")]
@@ -76,7 +88,7 @@
           :on-change #(reset! text (val-of %))}]
         [:h1.form-text.pull-right.db-status
          "The database currently contains " [:mark (count @current-db)] " datoms."]]
-       [render-hits (all-names-matching @text @current-db)]])))
+       [render-hits (all-names-matching @text @current-db) @text]])))
 
 (defn insert-data-component []
   [:div.form-group
